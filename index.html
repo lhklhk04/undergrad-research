@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>뮤지컬 관극 일지</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="nav">
+      <span class="logo">🎈 뮤지컬 관극 일지</span>
+      <ul>
+        <li><a href="#log">관람 기록</a></li>
+        <li><a href="#gallery">갤러리</a></li>
+        <li><a href="#calendar">캘린더</a></li>
+      </ul>
+    </nav>
+    <div class="hero-text">
+      <h1>뮤지컬 관극 일지</h1>
+      <p>보러 간 공연들을 버튼 하나로 하나씩 채워나가는 공간이에요.</p>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ============ 관람 기록 ============ -->
+    <section id="log" class="section">
+      <div class="section-head">
+        <h2>관람 기록</h2>
+        <div class="section-head-actions">
+          <button type="button" id="open-record-modal" class="btn-add">+ 새 기록 추가</button>
+          <button type="button" id="open-event-modal" class="btn-add">+ 티켓팅 날짜 추가</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>공연명</th>
+              <th>관람일</th>
+              <th>공연장</th>
+              <th>배우진</th>
+              <th>별점</th>
+              <th>후기</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="record-body">
+            <!-- JS가 이 안에 기록을 그려줍니다 -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ 갤러리 ============ -->
+    <section id="gallery" class="section">
+      <h2>갤러리</h2>
+      <p class="section-hint">관람 기록에 사진을 첨부하면 여기에 자동으로 모여요</p>
+
+      <div class="gallery-grid" id="gallery-grid">
+        <!-- JS가 이 안에 사진 카드를 그려줍니다 -->
+      </div>
+    </section>
+
+    <!-- ============ 캘린더 ============ -->
+    <section id="calendar" class="section">
+      <h2>캘린더</h2>
+      <div class="legend">
+        <span class="dot dot-watch"></span> 관람일
+        <span class="dot dot-ticket"></span> 티켓팅 날짜
+        <span class="legend-hint">(태그를 클릭하면 삭제돼요)</span>
+      </div>
+
+      <div class="calendar">
+        <div class="calendar-nav">
+          <button id="prev-month" type="button" aria-label="이전 달">◀</button>
+          <h3 class="calendar-title" id="calendar-title"></h3>
+          <button id="next-month" type="button" aria-label="다음 달">▶</button>
+        </div>
+        <ul class="calendar-grid" id="calendar-grid">
+          <!-- JS가 이 안에 달력을 그려줍니다 -->
+        </ul>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="data-io">
+      <button type="button" id="export-data-btn" class="btn-io">⬇ 내보내기</button>
+      <button type="button" id="import-data-btn" class="btn-io">⬆ 불러오기</button>
+      <input type="file" id="import-file-input" accept="application/json" hidden>
+    </div>
+    <p class="footer-hint">기록은 이 브라우저에만 저장돼요. 다른 기기·브라우저를 쓰거나 컴퓨터를 바꿀 땐 내보내기한 파일로 불러오기 해주세요.</p>
+    <p class="footer-name">이홍기 · 중부대학교 인공지능학과 2학년</p>
+    <p class="footer-activity">학부연구생으로 활동하며 배운 내용을 바탕으로 직접 기획하고 만든 사이트예요</p>
+    <p class="footer-copyright">&copy; 2026 이홍기</p>
+  </footer>
+
+  <!-- ============ 관람 기록 추가 모달 ============ -->
+  <div class="modal-overlay" id="record-modal" hidden>
+    <div class="modal-box">
+      <button type="button" class="modal-close" data-close-modal="record-modal" aria-label="닫기">✕</button>
+      <form id="record-form" class="add-form add-form--modal">
+        <h3 id="record-modal-title">+ 새 기록 추가</h3>
+        <div class="form-grid">
+          <input type="text" id="r-title" placeholder="공연명" required>
+          <input type="date" id="r-date" required>
+          <input type="text" id="r-venue" placeholder="공연장">
+          <input type="text" id="r-cast" placeholder="배우진">
+          <select id="r-rating">
+            <option value="5">★★★★★</option>
+            <option value="4">★★★★☆</option>
+            <option value="3">★★★☆☆</option>
+            <option value="2">★★☆☆☆</option>
+            <option value="1">★☆☆☆☆</option>
+          </select>
+          <input type="text" id="r-review" placeholder="한줄 후기">
+          <input type="file" id="r-photo" accept="image/*">
+        </div>
+        <div class="photo-edit-row">
+          <img id="r-photo-preview" class="photo-preview" alt="현재 사진" hidden>
+          <label class="remove-photo-label" id="r-remove-photo-wrap" hidden>
+            <input type="checkbox" id="r-remove-photo"> 사진 삭제
+          </label>
+        </div>
+        <p class="form-hint">사진을 선택하면 갤러리에도 자동으로 추가돼요 (선택 사항)</p>
+        <button type="submit" id="record-submit-btn">추가하기</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============ 티켓팅 날짜 추가 모달 ============ -->
+  <div class="modal-overlay" id="event-modal" hidden>
+    <div class="modal-box">
+      <button type="button" class="modal-close" data-close-modal="event-modal" aria-label="닫기">✕</button>
+      <form id="event-form" class="add-form add-form--modal">
+        <h3>+ 티켓팅 날짜 추가</h3>
+        <p class="form-hint">관람일은 위 관람 기록을 추가하면 자동으로 표시돼요. 여기서는 예매(티켓팅) 날짜만 등록해요.</p>
+        <div class="form-grid">
+          <input type="date" id="e-date" required>
+          <input type="text" id="e-title" placeholder="공연명" required>
+        </div>
+        <button type="submit">추가하기</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
